@@ -5,13 +5,14 @@
   [![Python](https://img.shields.io/badge/Python-3.13+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
   [![LangChain](https://img.shields.io/badge/LangChain-Integration-green.svg?style=for-the-badge)](https://langchain.com)
   [![MCP](https://img.shields.io/badge/MCP-FastMCP-orange.svg?style=for-the-badge)](https://modelcontextprotocol.io/)
+  [![N8N](https://img.shields.io/badge/N8N-Workflow-red.svg?style=for-the-badge)](https://n8n.io)
 </div>
 
 ---
 
 ## 📖 Project Overview
 
-This project serves as a practical demonstration of the **Model Context Protocol (MCP)**. It showcases how to create a custom MCP server that exposes specific tools, and how an AI agent (powered by LangChain and OpenAI) can dynamically discover and use these tools to answer user queries.
+This project serves as a practical demonstration of the **Model Context Protocol (MCP)**. It showcases how to create a custom MCP server that exposes specific tools, and how an AI agent (powered by LangChain, LangGraph, and N8N) can utilize those tools through the `streamable-http` protocol.
 
 The project effectively bridges custom data/actions (like searching employee information or querying the web) with powerful Large Language Models.
 
@@ -33,6 +34,13 @@ The intelligent client that interacts with the user.
 - Employs `ChatOpenAI` (model: `gpt-4o-mini`) as the reasoning engine.
 - Binds the fetched tools to the agent, allowing it to autonomously decide when to search the web or fetch employee info based on the user's prompt.
 - Available both as a terminal script (`agent_graph.py`) and an interactive Jupyter Notebook (`graph.ipynb`).
+
+### 3. 🔄 N8N Workflow Agent
+A workflow automation platform that integrates with the MCP server to orchestrate complex business processes.
+- **Local Installation via Docker**: N8N is deployed locally using Docker containers for easy setup and isolation.
+- Connects to the MCP server via the `streamable-http` protocol.
+- Allows visual workflow design for automating interactions with the MCP tools.
+- Provides an alternative to code-based agents for non-technical users.
 
 ---
 
@@ -94,6 +102,7 @@ Here is a visual overview of the MCP Demo in action:
 ### Prerequisites
 - Python 3.13 or higher.
 - API Keys for OpenAI (`OPENAI_API_KEY`) and Tavily (`TAVILY_API_KEY`).
+- Docker and Docker Compose (for N8N workflow deployment).
 
 ### Installation
 
@@ -131,4 +140,56 @@ Alternatively, you can open and run the cells in `graph.ipynb` for an interactiv
 
 ---
 
+## 🔧 N8N Workflow Integration
+
+### Setup N8N Locally with Docker
+
+N8N is deployed locally using Docker containers, providing a no-code/low-code interface for creating workflows that interact with the MCP server.
+
+**Prerequisites:**
+- Docker and Docker Compose installed on your machine.
+
+**Step 1: Start N8N with Docker**
+```bash
+docker-compose up -d n8n
+```
+
+**Step 2: Access N8N**
+Open your browser and navigate to:
+```
+http://localhost:5678
+```
+
+**Step 3: Create a Workflow**
+- Design a new workflow in the N8N interface.
+- Add HTTP nodes to communicate with the MCP server at `http://localhost:24000/mcp`.
+- Configure the nodes to call the available MCP tools (`get_employee_infos`, `search`).
+- Execute the workflow to test the integration.
+
+**Example Docker Compose Configuration:**
+```yaml
+version: '3'
+services:
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - WEBHOOK_URL=http://localhost:5678/
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - mcp-network
+
+volumes:
+  n8n_data:
+
+networks:
+  mcp-network:
+    driver: bridge
+```
+
+---
 
