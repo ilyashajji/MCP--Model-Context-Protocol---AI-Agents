@@ -71,6 +71,22 @@ Here is a visual overview of the MCP Demo in action:
 ![Employee Info Tool Execution](./D.png)
 *Description: The agent calling the `get_employee_infos` tool to retrieve internal mock data about an employee.*
 
+### A1. Détail de l'Initialisation
+![A1](./A1.png)
+*Description: Aperçu détaillé de la phase d'initialisation du système et de la préparation des composants.*
+
+### A2. Connexion et Découverte
+![A2](./A2.png)
+*Description: Étape de connexion du client LangChain et découverte des outils disponibles sur le serveur MCP.*
+
+### A3. Analyse et Exécution
+![A3](./A3.png)
+*Description: L'agent analyse la requête de l'utilisateur et exécute les outils appropriés en temps réel.*
+
+### A4. Synthèse des Résultats
+![A4](./A4.png)
+*Description: Affichage de la réponse finale formulée par l'agent à partir des données récupérées.*
+
 ---
 
 ## 🚀 Getting Started
